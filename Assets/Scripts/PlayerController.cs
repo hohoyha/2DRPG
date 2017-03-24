@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour {
 
     public float moveSpeed;
     private Animator anim;
+    private Rigidbody2D myRigibody;
 
     private bool playerMoving;
     private Vector2 lastMove;
@@ -12,7 +13,9 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
    
         anim = GetComponent<Animator>();
-	}
+        myRigibody = GetComponent<Rigidbody2D>();
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -23,16 +26,28 @@ public class PlayerController : MonoBehaviour {
 
         if (h > 0.5f || h < -0.5f)
         {
-            transform.Translate(new Vector3(h * moveSpeed * Time.deltaTime, 0, 0));
+            //transform.Translate(new Vector3(h * moveSpeed * Time.deltaTime, 0, 0));
+            myRigibody.velocity = new Vector2(h * moveSpeed, myRigibody.velocity.y);
             playerMoving = true;
             lastMove = new Vector2(h, 0);
         }
 
         if (v > 0.5f || v < -0.5f)
         {
-            transform.Translate(new Vector3( 0, v * moveSpeed * Time.deltaTime, 0));
+            //  transform.Translate(new Vector3( 0, v * moveSpeed * Time.deltaTime, 0));
+            myRigibody.velocity = new Vector2(myRigibody.velocity.x, v * moveSpeed);
             playerMoving = true;
             lastMove = new Vector2(0, v);
+        }
+
+        if( h < 0.5f && h > -0.5f)
+        {
+            myRigibody.velocity = new Vector2(0, myRigibody.velocity.y);
+        }
+
+        if (v < 0.5f && v > -0.5f)
+        {
+            myRigibody.velocity = new Vector2(myRigibody.velocity.x, 0);
         }
 
         anim.SetFloat("MoveX", h);
