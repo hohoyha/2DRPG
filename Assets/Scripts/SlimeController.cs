@@ -19,7 +19,7 @@ public class SlimeController : MonoBehaviour {
 
     public float waitToReload;
     private bool reloadig = false;
-    public GameObject thePlayer;
+    private GameObject thePlayer;
 
 	// Use this for initialization
 	void Start () {
