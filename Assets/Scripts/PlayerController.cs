@@ -12,6 +12,10 @@ public class PlayerController : MonoBehaviour {
 
     private static bool playerExists = false;
 
+    private bool attacking;
+    public float attackTime;
+    private float attackTimeCounter;
+
 	// Use this for initialization
 	void Start () {
    
@@ -36,30 +40,53 @@ public class PlayerController : MonoBehaviour {
 
         playerMoving = false;
 
-        if (h > 0.5f || h < -0.5f)
+        if(!attacking)
         {
-            //transform.Translate(new Vector3(h * moveSpeed * Time.deltaTime, 0, 0));
-            myRigibody.velocity = new Vector2(h * moveSpeed, myRigibody.velocity.y);
-            playerMoving = true;
-            lastMove = new Vector2(h, 0);
+            if (h > 0.5f || h < -0.5f)
+            {
+                //transform.Translate(new Vector3(h * moveSpeed * Time.deltaTime, 0, 0));
+                myRigibody.velocity = new Vector2(h * moveSpeed, myRigibody.velocity.y);
+                playerMoving = true;
+                lastMove = new Vector2(h, 0);
+            }
+
+            if (v > 0.5f || v < -0.5f)
+            {
+                //  transform.Translate(new Vector3( 0, v * moveSpeed * Time.deltaTime, 0));
+                myRigibody.velocity = new Vector2(myRigibody.velocity.x, v * moveSpeed);
+                playerMoving = true;
+                lastMove = new Vector2(0, v);
+            }
+
+            if (h < 0.5f && h > -0.5f)
+            {
+                myRigibody.velocity = new Vector2(0, myRigibody.velocity.y);
+            }
+
+            if (v < 0.5f && v > -0.5f)
+            {
+                myRigibody.velocity = new Vector2(myRigibody.velocity.x, 0);
+            }
         }
 
-        if (v > 0.5f || v < -0.5f)
+
+        if(Input.GetKeyDown(KeyCode.J))
         {
-            //  transform.Translate(new Vector3( 0, v * moveSpeed * Time.deltaTime, 0));
-            myRigibody.velocity = new Vector2(myRigibody.velocity.x, v * moveSpeed);
-            playerMoving = true;
-            lastMove = new Vector2(0, v);
+            attackTimeCounter = attackTime;
+            attacking = true;
+            myRigibody.velocity = Vector2.zero;
+            anim.SetBool("Attack", true);
         }
 
-        if( h < 0.5f && h > -0.5f)
+        if( attackTimeCounter > 0)
         {
-            myRigibody.velocity = new Vector2(0, myRigibody.velocity.y);
+            attackTimeCounter -= Time.deltaTime;
         }
 
-        if (v < 0.5f && v > -0.5f)
+        if(attackTimeCounter <= 0)
         {
-            myRigibody.velocity = new Vector2(myRigibody.velocity.x, 0);
+            attacking = false;
+            anim.SetBool("Attack", false);
         }
 
         anim.SetFloat("MoveX", h);
