@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HurtEnemy : MonoBehaviour {
 
+    public int damage = 10;
+    public GameObject damgeBurst;
+    public GameObject HurtPos;
 	// Use this for initialization
 	void Start () {
 		
@@ -18,7 +21,8 @@ public class HurtEnemy : MonoBehaviour {
     {
         if(collision.gameObject.tag == "Enemy")
         {
-            Destroy(collision.gameObject);
+            collision.gameObject.GetComponent<EnemyHealthManager>().HurtEnemy(damage);
+            Instantiate(damgeBurst, HurtPos.transform.position, HurtPos.transform.rotation);
         }
     }
 }
