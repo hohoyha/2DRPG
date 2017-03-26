@@ -6,7 +6,8 @@ public class HurtEnemy : MonoBehaviour {
 
     public int damage = 10;
     public GameObject damgeBurst;
-    public GameObject HurtPos;
+    public Transform HitPoint;
+    public GameObject damageNumber;
 	// Use this for initialization
 	void Start () {
 		
@@ -22,7 +23,9 @@ public class HurtEnemy : MonoBehaviour {
         if(collision.gameObject.tag == "Enemy")
         {
             collision.gameObject.GetComponent<EnemyHealthManager>().HurtEnemy(damage);
-            Instantiate(damgeBurst, HurtPos.transform.position, HurtPos.transform.rotation);
+            Instantiate(damgeBurst, HitPoint.transform.position, HitPoint.transform.rotation);
+            GameObject clone = (GameObject)Instantiate(damageNumber, HitPoint.transform.position, Quaternion.Euler(Vector3.zero));
+            clone.GetComponent<FloatingNumbers>().damgeNumber = damage;
         }
     }
 }
